@@ -10,14 +10,14 @@ class Banco {
         Memoria memoria_i2c;
     public:
         Banco();
-        void resetBanco()
-        void adicionaRegistro(Registro reg)
-        void removeRegistro(int add)
-        Registro getRegistro(int add)
-        int getIndiceRegistroPorNome()
-        int getIndiceRegistroPorTelefone()
-        void desfragmentaBanco()
-        void getStatusBanco()
+        void resetBanco();
+        void adicionaRegistro(Registro reg);
+        void removeRegistro(int add);
+        Registro getRegistro(int add);
+        int getIndiceRegistroPorNome();
+        int getIndiceRegistroPorTelefone();
+        void desfragmentaBanco();
+        void getStatusBanco();
 };
 
 

@@ -1,23 +1,23 @@
 #include "menu.hpp"
-
-void listaRegistros(){
+#include "banco.hpp"
+void listaRegistros(Banco banco){
     printf("Lista de registros\n");
 }
-void buscaRegistroPorNome(){
+void buscaRegistroPorNome(Banco banco){
     printf("Busca registro por nome\n");
 }
-void buscaRegistroPorTelefone(){
+void buscaRegistroPorTelefone(Banco banco){
     printf("Busca registro por telefone\n");
 }
-void addRegistro(){
+void addRegistro(Banco banco){
     printf("Adiciona registro\n");
 }
-void subRegistro(){
+void subRegistro(Banco banco){
     printf("Remove registro\n");
 }
-void statusRegistros(){
+void statusRegistros(Banco banco){
     printf("Status de registros\n");
 }
-void resetBanco(){
-    printf("Reset banco de dados\n");
+void resetBanco(Banco banco){
+    printf("Reset Banco banco de dados\n");
 }

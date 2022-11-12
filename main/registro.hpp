@@ -11,6 +11,9 @@ class Registro {
         string nome;
         string telefone;
         string endereco;
+    
+    public:
+        Registro();
 };
 
 #endif

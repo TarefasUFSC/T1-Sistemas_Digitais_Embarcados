@@ -4,7 +4,7 @@
 
 Memoria::Memoria(void)
 {
-	printf("Chama o construtor\n");
+	//printf("Chama o construtor\n");
 	meuI2c = I2C();
 }
 
@@ -24,6 +24,9 @@ void Memoria::init(uint8_t device)
 {
 	dispositivoAlvo = device;
 	meuI2c.configura(PIN16, PIN5);
+    // no esp8366 o pino 16 é o SDA e o 5 é o SCL
+    // PIN16 = é o D0
+    // PIN5 = é o D1
 }
 
 void Memoria::escreve(uint16_t end, uint8_t b[], uint16_t tam)
@@ -66,7 +69,7 @@ void Memoria::le(uint16_t end, uint8_t b[], uint16_t tam)
 		meuI2c.write(endAtual);
 		meuI2c.start();
 		meuI2c.write((dev << 1) | 1);
-		b[a] = meuI2c.read();
+		b[a] = meuI2c.read(); //retorna o bite e coloca no endereco a no vetor b
 		meuI2c.stop();
 		endAtual++;
 	}

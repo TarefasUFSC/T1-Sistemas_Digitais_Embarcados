@@ -3,13 +3,13 @@
 
 #include <stdio.h>
 #include <string.h>
-
-void listaRegistros();
-void buscaRegistroPorNome();
-void buscaRegistroPorTelefone();
-void addRegistro();
-void subRegistro();
-void statusRegistros();
-void resetBanco();
+#include "banco.hpp"
+void listaRegistros(Banco banco);
+void buscaRegistroPorNome(Banco banco);
+void buscaRegistroPorTelefone(Banco banco);
+void addRegistro(Banco banco);
+void subRegistro(Banco banco);
+void statusRegistros(Banco banco);
+void resetBanco(Banco banco);
 
 #endif
