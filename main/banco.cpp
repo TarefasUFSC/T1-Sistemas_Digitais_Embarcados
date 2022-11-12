@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "banco.hpp"
+#include "serial.h"
 
 Banco::Banco(){
     this->memoria_i2c = Memoria();
@@ -30,11 +31,17 @@ Registro Banco::getRegistro(int add){
 
 //manu
 int Banco::getIndiceRegistroPorNome(){
+    printf("Digite o nome: ");
+    serial.readString((uint8_t *)leitura,20);
+    printf("%s\n",leitura);
 
 }
 
 //manu
 int Banco::getIndiceRegistroPorTelefone(){
+    printf("Digite o telefone: ");
+    serial.readString((uint8_t *)leitura,10);
+    printf("%s\n",leitura);
 
 }
 
