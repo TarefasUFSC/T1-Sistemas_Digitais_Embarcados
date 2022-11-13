@@ -6,19 +6,20 @@
 #include "freertos/task.h"
 #include "esp_system.h"
 #include "esp_spi_flash.h"
-#include "serial.h"
-#include "menu.hpp"
-//#include "memoria.h"
+#include "serial.hpp"
+#include "banco.hpp"
+//#include "menu.hpp"
+//#include "memoria.hpp"
 #include <inttypes.h>
 
-using namespace std;
 extern "C" void app_main();
+int v=0;
 
-char printMenu()
+
+void printMenu()
 {
     
 
-    char cchoice[1];
     printf(" \n");
     printf("[1] - Lista todos os registros\n");
     printf("[2] - pesquisa registro por nome\n");
@@ -27,9 +28,70 @@ char printMenu()
     printf("[5] - remove registro baseado no telefone\n");
     printf("[6] - mostra a quantidade de registros atualmente armazenados\n");
     printf("[7] - Inicializa o banco de dados (todas as informacoes armazenadas serao perdidas)\n");
+    
+    //return '1';
+}
 
-    serial.readString((uint8_t *)cchoice, 1);
-    return cchoice[0];
+static Banco banco = Banco();
+void listaRegistros(){
+    printf("Lista de registros\n");
+    vector<Registro> registros = banco.getTodosRegistros();
+    for (int i = 0; i < registros.size(); i++)
+    {
+        printf("Nome: %s\n", registros[i].nome);
+        printf("Telefone: %s\n", registros[i].telefone);
+        printf("Endereco: %s\n", registros[i].endereco);
+        printf(" \n");
+    }
+}
+void buscaRegistroPorNome(){
+    printf("Busca registro por nome\n");
+    char nome[20];
+    printf("Digite o nome: \n");
+    serial.readString((uint8_t *)nome, 20);
+    printf("%s\n", nome);
+    banco.getIndiceRegistroPorNome(nome);
+}
+void buscaRegistroPorTelefone(){
+    printf("Busca registro por telefone\n");
+    printf("Digite o telefone: \n");
+    char telefone[14];
+    serial.readString((uint8_t *)telefone, 14);
+    printf("%s\n", telefone);
+    banco.getIndiceRegistroPorTelefone(telefone);
+}
+void addRegistro(){
+    printf("Adiciona registro\n");
+    char nome[20];
+    char telefone[14];
+    char endereco[40];
+    printf("Digite o nome: \n");
+    serial.readString((uint8_t *)nome, 20);
+    printf("%s\n", nome);
+    printf("Digite o telefone: \n");
+    serial.readString((uint8_t *)telefone, 14);
+    printf("%s\n", telefone);
+    printf("Digite o endereco: \n");
+    serial.readString((uint8_t *)endereco, 40);
+    printf("%s\n", endereco);
+    Registro reg = Registro(nome, telefone, endereco);
+    banco.adicionaRegistro(reg);
+}
+void subRegistro(){
+    printf("Remove registro\n");
+    char telefone[14];
+    printf("Digite o telefone: \n");
+    serial.readString((uint8_t *)telefone, 14);
+    printf("%s\n", telefone);
+    banco.removeRegistro(banco.getIndiceRegistroPorTelefone(telefone));
+}
+void statusRegistros(){
+    printf("Status de registros\n");
+    banco.getStatusBanco();
+}
+void resetBanco(){
+    printf("Reset Banco banco de dados\n");
+    banco.resetBanco();
 }
 
 void app_main()
@@ -47,9 +109,12 @@ void app_main()
 
     while (1)
     {
-        char choice = printMenu();
+       printMenu();
+       
+        char choice = serial.readChar();
         if (myMap.find(choice) != myMap.end())
         {
+            printf("choice: %c\n", choice);
             myMap[choice]();
         }
         else

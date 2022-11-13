@@ -1,16 +1,21 @@
 #ifndef _REGISTRO_
 #define _REGISTRO_
 
-#include <iostream>
 #include <string>
 
 using namespace std;
 
 class Registro {
     public:
-        string nome;
-        string telefone;
-        string endereco;
+        char nome[20];
+        char telefone[14];
+        char endereco[30];
+    
+    public:
+        Registro();
+        Registro(string nome, string telefone, string endereco);
+        Registro(uint8_t* bytes);
+        uint8_t* returnBytes();
 };
 
 #endif

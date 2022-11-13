@@ -1,5 +1,5 @@
-#ifndef __DIGITAL__
-#define __DIGITAL__
+#ifndef _DIGITAL_
+#define _DIGITAL_
 #include "driver/gpio.h"
 
 #define INPUT 1

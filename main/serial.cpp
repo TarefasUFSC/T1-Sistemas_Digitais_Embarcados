@@ -1,6 +1,5 @@
 
-#include "serial.h"
-
+#include "serial.hpp"
 void Serial::begin (int v){
     uart_config_t uart_config = {
         .baud_rate = v,                         //Bluetooth baud rate 
@@ -37,5 +36,7 @@ void Serial::readString( uint8_t *buf, uint32_t l) {
 	}
 	buf[lidos]=0;
 }
+
+
 
 Serial serial = Serial();
