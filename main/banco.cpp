@@ -111,7 +111,7 @@ vector<Registro> Banco::getTodosRegistros()
 
 
 //manu
-Registro Banco::getRegistro(int add){
+Registro Banco::getRegistro(uint8_t add){
     //return the register objetc at the address add
     char read_data[64];
     Registro reg;
@@ -129,7 +129,7 @@ Registro Banco::getRegistro(int add){
 }
 
 //manu
-int Banco::getIndiceRegistroPorNome(){
+uint8_t Banco::getIndiceRegistroPorNome(char* nome){
     char leitura[20];
     printf("Digite o nome: ");
     serial.readString((uint8_t *)leitura,20);
@@ -155,13 +155,13 @@ int Banco::getIndiceRegistroPorNome(){
 }
 
 //manu
-int Banco::getIndiceRegistroPorTelefone(){
+uint8_t Banco::getIndiceRegistroPorTelefone(char* telefone){
     char leitura[14];
     printf("Digite o telefone: ");
     serial.readString((uint8_t *)leitura,14);
     printf("%s\n",leitura);
 
-
+    return 0;
 }
 
 // ralph
