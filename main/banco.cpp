@@ -2,6 +2,7 @@
 #include "banco.hpp"
 #include "serial.hpp"
 #include "memoria.hpp"
+#include <vector>
 
 Banco::Banco()
 {
@@ -35,22 +36,86 @@ void Banco::resetBanco()
 // ralph
 void Banco::adicionaRegistro(Registro reg)
 {
+    // 1 - ler o header
+    uint8_t header[64];
+    this->memoria_i2c.le(0, header, 64);
+    // 2 - ler a qtd
+    uint16_t quantidade_atual = header[0] << 8 | header[1];
+    // 3 - ler o tamanho maximo
+    uint16_t tamanho_maximo = header[2] << 8 | header[3];
+    // 4 - verificar se o indice é menor que o tamanho maximo
+    if (quantidade_atual < tamanho_maximo)
+    {
+        // 5 - escrever o registro na memoria
+        // ele começa a colocar na posição 1, pois a posição 0 é o header
+        this->memoria_i2c.escreve(((quantidade_atual + 1)) * 64, reg.returnBytes(), 64);
+        // 6 - incrementar a qtd
+        quantidade_atual++;
+        // 7 - salvar a qtd no header
+        header[0] = quantidade_atual >> 8;
+        header[1] = quantidade_atual;
+        // 8 - salvar o header na memoria
+        this->memoria_i2c.escreve(0, header, 64);
+    }
 }
 
 // ralph
-void Banco::removeRegistro(int add)
+void Banco::removeRegistro(uint8_t add)
 {
+    // 1 - ler o header
+    uint8_t header[64];
+    this->memoria_i2c.le(0, header, 64);
+    // 2 - ler a qtd
+    uint16_t quantidade_atual = header[0] << 8 | header[1];
+    // 3 - ler o tamanho maximo
+    uint16_t tamanho_maximo = header[2] << 8 | header[3];
+    
+    uint8_t vazio[64];
+    for (int i = 0; i < 64; i++)
+    {
+        vazio[i] = 0;
+    }
+    quantidade_atual--;
+    // salva o novo header
+    header[0] = quantidade_atual >> 8;
+    header[1] = quantidade_atual;
+    this->memoria_i2c.escreve(0, header, 64);
+    // salva o vazio
+    this->memoria_i2c.escreve(add * 64, vazio, 64);
+    // desfragmenta o banco
+    this->desfragmentaBanco(add);
+}
+
+//ralph
+vector<Registro> Banco::getTodosRegistros()
+{
+    vector<Registro> registros;
+    // 1 - ler o header
+    uint8_t header[64];
+    this->memoria_i2c.le(0, header, 64);
+    // 2 - ler a qtd
+    uint16_t quantidade_atual = header[0] << 8 | header[1];
+    // 3 - ler o tamanho maximo
+    uint16_t tamanho_maximo = header[2] << 8 | header[3];
+    // 4 - ler todos os registros
+    for (int i = 1; i <= quantidade_atual; i++)
+    {
+        uint8_t reg[64];
+        this->memoria_i2c.le(i * 64, reg, 64);
+        registros.push_back(Registro(reg));
+    }
+    return registros;
 }
 
 // manu
-Registro Banco::getRegistro(int add)
+Registro Banco::getRegistro(uint8_t add)
 {
     Registro reg = Registro();
     return reg;
 }
 
 // manu
-int Banco::getIndiceRegistroPorNome()
+uint8_t Banco::getIndiceRegistroPorNome(char[20] nome)
 {
     printf("Digite o nome: ");
     //serial.readString((uint8_t *)leitura, 20);
@@ -59,17 +124,35 @@ int Banco::getIndiceRegistroPorNome()
 }
 
 // manu
-int Banco::getIndiceRegistroPorTelefone()
+uint8_t Banco::getIndiceRegistroPorTelefone(char[14] telefone)
 {
-    printf("Digite o telefone: ");
-    //serial.readString((uint8_t *)leitura, 10);
-    //printf("%s\n", leitura);
+    
     return 0;
 }
 
 // ralph
-void Banco::desfragmentaBanco()
+void Banco::desfragmentaBanco(uint8_t pos_excluida)
 {
+    // 1 - ler o header
+    uint8_t header[64];
+    this->memoria_i2c.le(0, header, 64);
+    // 2 - ler a qtd
+    uint16_t quantidade_atual = header[0] << 8 | header[1];
+    // 3 - ler o tamanho maximo
+    uint16_t tamanho_maximo = header[2] << 8 | header[3];
+
+    // troca o ultimo registro com o registro excluido
+    uint8_t ultimo_registro[64];
+    this->memoria_i2c.le((quantidade_atual+1) * 64, ultimo_registro, 64);
+    this->memoria_i2c.escreve(pos_excluida * 64, ultimo_registro, 64);
+
+    // se quiser apagar completamente o ultimo registro
+    // uint8_t vazio[64];
+    // for (int i = 0; i < 64; i++)
+    // {
+    //     vazio[i] = 0;
+    // }
+    // this->memoria_i2c.escreve((quantidade_atual+1) * 64, vazio, 64);
 }
 
 // manu

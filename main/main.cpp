@@ -35,18 +35,55 @@ void printMenu()
 static Banco banco = Banco();
 void listaRegistros(){
     printf("Lista de registros\n");
+    vector<Registro> registros = banco.getTodosRegistros();
+    for (int i = 0; i < registros.size(); i++)
+    {
+        printf("Nome: %s\n", registros[i].nome);
+        printf("Telefone: %s\n", registros[i].telefone);
+        printf("Endereco: %s\n", registros[i].endereco);
+        printf(" \n");
+    }
 }
 void buscaRegistroPorNome(){
     printf("Busca registro por nome\n");
+    char nome[20];
+    printf("Digite o nome: ");
+    serial.readString((uint8_t *)nome, 20);
+    printf("%s\n", nome);
+    banco.getIndiceRegistroPorNome(nome);
 }
 void buscaRegistroPorTelefone(){
     printf("Busca registro por telefone\n");
+    printf("Digite o telefone: ");
+    char telefone[14];
+    serial.readString((uint8_t *)telefone, 14);
+    printf("%s\n", telefone);
+    banco.getIndiceRegistroPorTelefone(telefone);
 }
 void addRegistro(){
     printf("Adiciona registro\n");
+    char nome[20];
+    char telefone[14];
+    char endereco[40];
+    printf("Digite o nome: ");
+    serial.readString((uint8_t *)nome, 20);
+    printf("%s\n", nome);
+    printf("Digite o telefone: ");
+    serial.readString((uint8_t *)telefone, 14);
+    printf("%s\n", telefone);
+    printf("Digite o endereco: ");
+    serial.readString((uint8_t *)endereco, 40);
+    printf("%s\n", endereco);
+    Registro reg = Registro(nome, telefone, endereco);
+    banco.adicionaRegistro(reg);
 }
 void subRegistro(){
     printf("Remove registro\n");
+    char telefone[14];
+    printf("Digite o telefone: ");
+    serial.readString((uint8_t *)telefone, 14);
+    printf("%s\n", telefone);
+    banco.removeRegistro(banco.getIndiceRegistroPorTelefone(telefone));
 }
 void statusRegistros(){
     printf("Status de registros\n");
