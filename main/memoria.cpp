@@ -12,7 +12,7 @@ void Memoria::testa_eeprom_disponivel(void)
 {
 	uint8_t dev = 0x50 | dispositivoAlvo;
 
-	for (;;)
+	while(1)
 	{
 		meuI2c.start();
 		int ack = meuI2c.write((dev << 1));

@@ -1,7 +1,6 @@
 #ifndef _REGISTRO_
 #define _REGISTRO_
 
-#include <iostream>
 #include <string>
 
 using namespace std;

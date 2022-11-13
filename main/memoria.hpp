@@ -2,6 +2,7 @@
 #define _MEMORIA_
 #include <inttypes.h> 
 #include "i2c.h"
+#include "digital.h"
 
 
 class Memoria {

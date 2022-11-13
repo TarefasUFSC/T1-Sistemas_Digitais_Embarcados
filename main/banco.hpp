@@ -1,8 +1,8 @@
 #ifndef _BANCO_
 #define _BANCO_
 
-#include <iostream>
 #include "registro.hpp"
+#include "serial.hpp"
 #include "memoria.hpp"
 
 class Banco {
