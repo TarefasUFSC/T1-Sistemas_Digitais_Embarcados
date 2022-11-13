@@ -118,19 +118,11 @@ Registro Banco::getRegistro(uint8_t add){
     // 2 - ler a qtd
     uint16_t quantidade_atual = header[0] << 8 | header[1];
     // 4 - verificar se o endereço é menor que a quantidade atual
+    Registro reg;
     if (add <= quantidade_atual){
         char read_data[64];
-        Registro reg;
         memoria_i2c.le(add, (char*) read_data, 64);
-        for(int i = 0; i < 20; i++){
-            reg.nome[i] = read_data[i];
-        }
-        for(int i = 0; i < 14; i++){
-            reg.telefone[i] = read_data[i+20];
-        }
-        for(int i = 0; i < 30; i++){
-            reg.endereco[i] = read_data[i+34];
-        }
+        reg = Registro(read_data);
     }
     return reg;
 }
