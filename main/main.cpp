@@ -38,10 +38,7 @@ void listaRegistros(){
     vector<Registro> registros = banco.getTodosRegistros();
     for (int i = 0; i < registros.size(); i++)
     {
-        printf("Nome: %s\n", registros[i].nome);
-        printf("Telefone: %s\n", registros[i].telefone);
-        printf("Endereco: %s\n", registros[i].endereco);
-        printf(" \n");
+        registros.at(i).printRegistro();
     }
 }
 void buscaRegistroPorNome(){
@@ -50,7 +47,15 @@ void buscaRegistroPorNome(){
     printf("Digite o nome: \n");
     serial.readString((uint8_t *)nome, 20);
     printf("%s\n", nome);
-    banco.getIndiceRegistroPorNome(nome);
+    uint8_t add = banco.getIndiceRegistroPorNome(nome);
+    printf("Indice: %d\n", add);
+    if(add != 0){
+        Registro *reg = banco.getRegistro(add);
+        reg->printRegistro();
+    }
+    else{
+        printf("Registro nao encontrado\n");
+    }
 }
 void buscaRegistroPorTelefone(){
     printf("Busca registro por telefone\n");
@@ -58,7 +63,15 @@ void buscaRegistroPorTelefone(){
     char telefone[14];
     serial.readString((uint8_t *)telefone, 14);
     printf("%s\n", telefone);
-    banco.getIndiceRegistroPorTelefone(telefone);
+    uint8_t add = banco.getIndiceRegistroPorTelefone(telefone);
+    printf("Indice: %d\n", add);
+    if(add != 0){
+        Registro *reg = banco.getRegistro(add);
+        reg->printRegistro();
+    }
+    else{
+        printf("Registro nao encontrado\n");
+    }
 }
 void addRegistro(){
     printf("Adiciona registro\n");

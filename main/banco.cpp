@@ -111,61 +111,87 @@ vector<Registro> Banco::getTodosRegistros()
 
 
 //manu
-Registro Banco::getRegistro(uint8_t add){
+Registro* Banco::getRegistro(uint8_t add){
     // 1 - ler o header
     uint8_t header[64];
     this->memoria_i2c.le(0, header, 64);
     // 2 - ler a qtd
     uint16_t quantidade_atual = header[0] << 8 | header[1];
     // 4 - verificar se o endereço é menor que a quantidade atual
-    Registro reg;
+    Registro *reg;
     if (add <= quantidade_atual){
-        char read_data[64];
-        memoria_i2c.le(add, (char*) read_data, 64);
-        reg = Registro(read_data);
+        uint8_t read_data[64];
+        memoria_i2c.le(add*64, read_data, 64);
+        reg = new Registro(read_data);
+    }
+    else{
+        reg = new Registro();
     }
     return reg;
 }
 
 //manu
 uint8_t Banco::getIndiceRegistroPorNome(char* nome){
+    // 1 - ler o header
+    uint8_t header[64];
+    this->memoria_i2c.le(0, header, 64);
+    // 2 - ler a qtd
+    uint16_t quantidade_atual = header[0] << 8 | header[1];
     //find the address of the name in the memory
-    uint8_t address = 0;
-    for(int i = 0; i < 65536; i++){
-        char read_data[64];
-        memoria_i2c.le(i, (char*) read_data, 64);
+    for(int i = 1; i <= quantidade_atual; i++){
+        bool achou = true;
+        uint8_t read_data[64];
+        memoria_i2c.le(i*64, read_data, 64);
         for(int j = 0; j < 20; j++){
-            if(read_data[j] != nome[j]){
+            printf("%d - %d ",  read_data[j],nome[j] );
+            if(nome[j] == 0 || nome[j] == '\n'){
                 break;
             }
-            if(j == 19){
-                address = i;
+            if(read_data[j] != nome[j]){
+                achou = false;
+                printf("diferene \n");
+                break;
             }
+            
+        }
+        if(achou){
+            printf("encontrado no endereco %d\n", i);
+            return i;
         }
     }
-
-    return address;
-
+    return 0;
 }
 
 //manu
 uint8_t Banco::getIndiceRegistroPorTelefone(char* telefone){
-    //find the address of the phone number in the memory
-    uint8_t address = 0;
-    for(int i = 0; i < 65536; i++){
-        char read_data[64];
-        memoria_i2c.le(i, (char*) read_data, 64);
-        for(int j = 0; j < 14; j++){
-            if(read_data[j+20] != telefone[j]){
+    // 1 - ler o header
+    uint8_t header[64];
+    this->memoria_i2c.le(0, header, 64);
+    // 2 - ler a qtd
+    uint16_t quantidade_atual = header[0] << 8 | header[1];
+    //find the address of the name in the memory
+    for(int i = 1; i <= quantidade_atual; i++){
+        bool achou = true;
+        uint8_t read_data[64];
+        memoria_i2c.le(i*64, read_data, 64);
+        for(int j = 20; j < 24; j++){
+            //printf("%d - %d",  read_data[j],telefone[j-20] );
+            if(telefone[j-20] == 0 || telefone[j-20] == '\n'){
                 break;
             }
-            if(j == 13){
-                address = i;
+            if(read_data[j] != telefone[j-20]){
+                achou = false;
+                //printf("diferene \n");
+                break;
             }
+            
+        }
+        if(achou){
+            printf("encontrado no endereco %d\n", i);
+            return i;
         }
     }
-
-    return address;
+    return 0;
 }
 
 // ralph

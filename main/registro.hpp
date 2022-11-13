@@ -16,6 +16,7 @@ class Registro {
         Registro(string nome, string telefone, string endereco);
         Registro(uint8_t* bytes);
         uint8_t* returnBytes();
+        void printRegistro();
 };
 
 #endif
