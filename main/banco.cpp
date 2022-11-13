@@ -115,7 +115,7 @@ Registro Banco::getRegistro(uint8_t add)
 }
 
 // manu
-uint8_t Banco::getIndiceRegistroPorNome(char[20] nome)
+uint8_t Banco::getIndiceRegistroPorNome(char* nome)
 {
     printf("Digite o nome: ");
     //serial.readString((uint8_t *)leitura, 20);
@@ -124,7 +124,7 @@ uint8_t Banco::getIndiceRegistroPorNome(char[20] nome)
 }
 
 // manu
-uint8_t Banco::getIndiceRegistroPorTelefone(char[14] telefone)
+uint8_t Banco::getIndiceRegistroPorTelefone(char* telefone)
 {
     
     return 0;

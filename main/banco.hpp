@@ -16,8 +16,8 @@ class Banco {
         void removeRegistro(uint8_t add);
         vector<Registro> getTodosRegistros();
         Registro getRegistro(uint8_t add);
-        uint8_t getIndiceRegistroPorNome(char[20] nome);
-        uint8_t getIndiceRegistroPorTelefone(char[14] telefone);
+        uint8_t getIndiceRegistroPorNome(char* nome);
+        uint8_t getIndiceRegistroPorTelefone(char* telefone);
         void desfragmentaBanco(uint8_t pos_excluida);
         void getStatusBanco();
 };

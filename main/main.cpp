@@ -47,14 +47,14 @@ void listaRegistros(){
 void buscaRegistroPorNome(){
     printf("Busca registro por nome\n");
     char nome[20];
-    printf("Digite o nome: ");
+    printf("Digite o nome: \n");
     serial.readString((uint8_t *)nome, 20);
     printf("%s\n", nome);
     banco.getIndiceRegistroPorNome(nome);
 }
 void buscaRegistroPorTelefone(){
     printf("Busca registro por telefone\n");
-    printf("Digite o telefone: ");
+    printf("Digite o telefone: \n");
     char telefone[14];
     serial.readString((uint8_t *)telefone, 14);
     printf("%s\n", telefone);
@@ -65,13 +65,13 @@ void addRegistro(){
     char nome[20];
     char telefone[14];
     char endereco[40];
-    printf("Digite o nome: ");
+    printf("Digite o nome: \n");
     serial.readString((uint8_t *)nome, 20);
     printf("%s\n", nome);
-    printf("Digite o telefone: ");
+    printf("Digite o telefone: \n");
     serial.readString((uint8_t *)telefone, 14);
     printf("%s\n", telefone);
-    printf("Digite o endereco: ");
+    printf("Digite o endereco: \n");
     serial.readString((uint8_t *)endereco, 40);
     printf("%s\n", endereco);
     Registro reg = Registro(nome, telefone, endereco);
@@ -80,7 +80,7 @@ void addRegistro(){
 void subRegistro(){
     printf("Remove registro\n");
     char telefone[14];
-    printf("Digite o telefone: ");
+    printf("Digite o telefone: \n");
     serial.readString((uint8_t *)telefone, 14);
     printf("%s\n", telefone);
     banco.removeRegistro(banco.getIndiceRegistroPorTelefone(telefone));
