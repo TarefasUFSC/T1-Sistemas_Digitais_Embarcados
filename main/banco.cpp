@@ -15,6 +15,7 @@ void Banco::resetBanco()
 {
     this->memoria_i2c.init(0);
     // memoria tem 65536 endereços de 1byte (8bits)
+
     // maior tamanho possivel, considerando cada registro com 64 bytes, é 1024 registros
     // mas como vou gastar 64 bytes para guardar o indice, o maximo de registros é 1023
     uint8_t header[64];
@@ -31,6 +32,7 @@ void Banco::resetBanco()
 
 
     this->memoria_i2c.escreve(0, header, 64);
+
 }
 
 // ralph
@@ -107,27 +109,59 @@ vector<Registro> Banco::getTodosRegistros()
     return registros;
 }
 
-// manu
-Registro Banco::getRegistro(uint8_t add)
-{
-    Registro reg = Registro();
+
+//manu
+Registro Banco::getRegistro(int add){
+    //return the register objetc at the address add
+    char read_data[64];
+    Registro reg;
+    memoria_i2c.le(add, (char*) read_data, 64);
+    for(int i = 0; i < 20; i++){
+        reg.nome[i] = read_data[i];
+    }
+    for(int i = 0; i < 14; i++){
+        reg.telefone[i] = read_data[i+20];
+    }
+    for(int i = 0; i < 30; i++){
+        reg.endereco[i] = read_data[i+34];
+    }
     return reg;
 }
 
-// manu
-uint8_t Banco::getIndiceRegistroPorNome(char* nome)
-{
+//manu
+int Banco::getIndiceRegistroPorNome(){
+    char leitura[20];
     printf("Digite o nome: ");
-    //serial.readString((uint8_t *)leitura, 20);
-    //printf("%s\n", leitura);
-    return 0;
+    serial.readString((uint8_t *)leitura,20);
+    printf("%s\n",leitura);
+
+    //find the address of the name in the memory
+    int address = 0;
+    for(int i = 0; i < 65536; i++){
+        char read_data[64];
+        memoria_i2c.le(i, (char*) read_data, 64);
+        for(int j = 0; j < 20; j++){
+            if(read_data[j] != leitura[j]){
+                break;
+            }
+            if(j == 19){
+                address = i;
+            }
+        }
+    }
+
+    return address;
+
 }
 
-// manu
-uint8_t Banco::getIndiceRegistroPorTelefone(char* telefone)
-{
-    
-    return 0;
+//manu
+int Banco::getIndiceRegistroPorTelefone(){
+    char leitura[14];
+    printf("Digite o telefone: ");
+    serial.readString((uint8_t *)leitura,14);
+    printf("%s\n",leitura);
+
+
 }
 
 // ralph
