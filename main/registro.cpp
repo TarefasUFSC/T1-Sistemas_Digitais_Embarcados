@@ -2,21 +2,18 @@
 
 Registro::Registro()
 {
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 21; i++)
     {
         this->nome[i] = '\0';
     }
-    for (int i = 0; i < 14; i++)
+    for (int i = 0; i < 15; i++)
     {
         this->telefone[i] = '\0';
     }
-    for (int i = 0; i < 40; i++)
+    for (int i = 0; i < 31; i++)
     {
         this->endereco[i] = '\0';
     }
-    this->nome[20] = '\0';
-    this->telefone[14] = '\0';
-    this->endereco[40] = '\0';
 }
 Registro::Registro(string nome, string telefone, string endereco)
 {
@@ -28,10 +25,13 @@ Registro::Registro(string nome, string telefone, string endereco)
     {
         this->telefone[i] = telefone[i];
     }
-    for (int i = 0; i < 40; i++)
+    for (int i = 0; i < 30; i++)
     {
         this->endereco[i] = endereco[i];
     }
+    this->nome[20] = '\0';
+    this->telefone[14] = '\0';
+    this->endereco[30] = '\0';
 }
 
 Registro::Registro(uint8_t *bytes)
@@ -49,6 +49,10 @@ Registro::Registro(uint8_t *bytes)
     {
         this->endereco[i] = bytes[i + 34];
     }
+    
+    this->nome[20] = '\0';
+    this->telefone[14] = '\0';
+    this->endereco[30] = '\0';
 }
 
 uint8_t *Registro::returnBytes()

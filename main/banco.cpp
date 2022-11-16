@@ -101,24 +101,26 @@ Registro *Banco::getRegistro(uint8_t add)
     return reg;
 }
 
+// manu
 bool Banco::verificaTextoIgual(char *texto1, char *texto2, uint8_t tamanho)
 {
     for (int j = 0; j < tamanho; j++)
     {
-        //printf("%d - %d ", texto1[j], texto2[j]);
+        // printf("%d - %d ", texto1[j], texto2[j]);
         if (texto2[j] == 0 || texto2[j] == '\n')
         {
             return true;
         }
         if (texto1[j] != texto2[j])
         {
-            //printf("diferente \n");
+            // printf("diferente \n");
             return false;
         }
     }
     return false;
-    // manu
 }
+
+// manu
 uint8_t Banco::getIndiceRegistroPorNome(char *nome)
 {
     // 1 - ler o header
@@ -149,17 +151,13 @@ uint8_t Banco::getIndiceRegistroPorTelefone(char *telefone)
     // find the address of the name in the memory
     for (int i = 1; i <= header.quantidade_atual; i++)
     {
-
-        for (int i = 1; i <= header.quantidade_atual; i++)
+        uint8_t read_data[64];
+        memoria_i2c.le(i * 64, read_data, 64);
+        Registro reg = Registro(read_data);
+        if (verificaTextoIgual(reg.telefone, telefone, 14))
         {
-            uint8_t read_data[64];
-            memoria_i2c.le(i * 64, read_data, 64);
-            Registro reg = Registro(read_data);
-            if (verificaTextoIgual(reg.telefone, telefone, 14))
-            {
-                printf("encontrado no endereco %d\n", i);
-                return i;
-            }
+            printf("encontrado no endereco %d\n", i);
+            return i;
         }
     }
     return 0;
