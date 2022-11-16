@@ -14,6 +14,9 @@ Registro::Registro()
     {
         this->endereco[i] = '\0';
     }
+    this->nome[20] = '\0';
+    this->telefone[14] = '\0';
+    this->endereco[40] = '\0';
 }
 Registro::Registro(string nome, string telefone, string endereco)
 {

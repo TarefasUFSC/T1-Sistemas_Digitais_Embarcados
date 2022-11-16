@@ -31,7 +31,7 @@ void Serial::readString(uint8_t *buf, uint32_t l)
 	int lidos = 0, c;
 	// while (getchar() != EOF)
 	// 	vTaskDelay(pdMS_TO_TICKS(50)); // ticks para ms
-	while (lidos <= l)
+	while (lidos < l)
 	{
 		c = getchar();
 		if (c != EOF && c!='\n')

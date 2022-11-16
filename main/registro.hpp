@@ -7,9 +7,9 @@ using namespace std;
 
 class Registro {
     public:
-        char nome[20];
-        char telefone[14];
-        char endereco[30];
+        char nome[21];
+        char telefone[15];
+        char endereco[31];
     
     public:
         Registro();
